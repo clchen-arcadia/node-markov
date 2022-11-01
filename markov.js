@@ -109,3 +109,7 @@ people, for the people, shall not perish from the earth.`;
 
 const markovGettysburg = new MarkovMachine(textString);
 markovGettysburg.getText();
+
+module.exports = {
+  MarkovMachine
+};
