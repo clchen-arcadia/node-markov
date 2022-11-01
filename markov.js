@@ -29,6 +29,9 @@ class MarkovMachine {
 
   getChains() {
     let markovMap = {};
+    //* Can add helper function with either null or next word to avoid repetition
+    //* "Add or push", start function with underscore, only in this scope
+    //* Can use conditional whether or not value is null
 
     const words = this.words;
 
