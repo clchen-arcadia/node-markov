@@ -28,32 +28,16 @@ class MarkovMachine {
    * */
 
   getChains() {
-    let markovMap = {};
-    //* Can add helper function with either null or next word to avoid repetition
-    //* "Add or push", start function with underscore, only in this scope
-    //* Can use conditional whether or not value is null
 
+    let chains = {};
     const words = this.words;
 
     for (let i = 0; i < words.length; i++) {
-      // the last iteration of this loop, set this connection to null, then break.
-      if (i === words.length - 1) {
-        if (markovMap[words[i]] === undefined) {
-          markovMap[words[i]] = [null];
-        } else {
-          markovMap[words[i]].push(null);
-        }
-        break;
-      }
-
-      if (markovMap[words[i]] === undefined) {
-        markovMap[words[i]] = [words[i + 1]];
-      } else {
-        markovMap[words[i]].push(words[i + 1]);
-      }
+      i === words.length - 1 ? this._createOrPush(words[i], null, chains) :
+        this._createOrPush(words[i], words[i+1], chains);
     }
 
-    return markovMap;
+    return chains;
   }
 
   /** Return random text from chains, starting at the first word and continuing
@@ -69,19 +53,36 @@ class MarkovMachine {
 
     while (nextWord !== null) {
       outputWords.push(nextWord);
-      nextWord = randomChoice(this.chains[nextWord]);
+      nextWord = this._randomChoice(this.chains[nextWord]);
     }
 
     return outputWords.join(" ");
   }
+
+
+  /** Accepts an array and returns a random item from the array. */
+
+  _randomChoice(arr) {
+    const randIdx = Math.floor(Math.random() * arr.length);
+    return arr[randIdx];
+  }
+
+  /** Method accepts key, value, and object. If key is not preexisting
+   * in the object, it will be created, with value of an array of single item
+   * of value. Otherwise, value will be pushed to the list value of key.
+   * Manipulates the object in place.
+   */
+  _createOrPush(key, val, obj) {
+
+    if (obj[key] === undefined) {
+      obj[key] = [val];
+    }
+    else {
+      obj[key].push(val);
+    }
+  }
 }
 
-/** Accepts an array and returns a random item from the array. */
-
-function randomChoice(arr) {
-  const randIdx = Math.floor(Math.random() * arr.length);
-  return arr[randIdx];
-}
 
 const textString = `Four score and seven years ago our
 fathers brought forth on this continent, a new nation, conceived in Liberty, and
@@ -106,5 +107,5 @@ these dead shall not have died in vain -- that this nation, under God, shall
 have a new birth of freedom -- and that government of the people, by the
 people, for the people, shall not perish from the earth.`;
 
-const catInHatMachine = new MarkovMachine(textString);
-catInHatMachine.getText();
+const markovGettysburg = new MarkovMachine(textString);
+markovGettysburg.getText();
