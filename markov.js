@@ -33,8 +33,9 @@ class MarkovMachine {
     const words = this.words;
 
     for (let i = 0; i < words.length; i++) {
-      i === words.length - 1 ? this._createOrPush(words[i], null, chains) :
-        this._createOrPush(words[i], words[i+1], chains);
+      i === words.length - 1
+        ? this._createOrPush(words[i], null, chains)
+        : this._createOrPush(words[i], words[i+1], chains);
     }
 
     return chains;
